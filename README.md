@@ -1,8 +1,8 @@
-# Sistema Web de Gestión y Reservas — Royal Technology
+# Sistema Web de Gestión y Reservas — Gold Working (proyecto liderado por Royal Technology)
 
 Proyecto de **Ingeniería de Software I** (ESPOL, Facultad de Ingeniería en Electricidad y Computación), Grupo 3.
 
-Prototipo web para gestionar reservas de oficinas privadas, espacios de coworking, salas de reuniones y estudios de podcast de Royal Technology: tarifario, disponibilidad, reservas con facturación, comprobantes de pago, saldos a favor, incidencias y métricas.
+Prototipo web para gestionar reservas de oficinas privadas, espacios de coworking, salas de reuniones y estudios de podcast de Gold Working: tarifario, disponibilidad, reservas con facturación, comprobantes de pago, saldos a favor, incidencias y métricas.
 
 ## Integrantes
 
@@ -13,7 +13,7 @@ Prototipo web para gestionar reservas de oficinas privadas, espacios de coworkin
 - Rojas San Andres Eloy Ransesx
 
 Profesor: Ing. Vanessa Alexandra Jurado Vite
-Cliente: Royal Technology
+Cliente: Gold Working (Royal Technology, empresa tecnológica del mismo grupo, lidera el proyecto)
 
 ## Cómo ejecutar el prototipo
 
@@ -42,7 +42,7 @@ Los datos se guardan en el `localStorage` del navegador. Para reiniciar la demo,
 ## Metodología y técnicas usadas
 
 - **Scrum** con el cliente como Product Owner, tres sprints y tablero en Trello.
-- **Levantamiento de requerimientos:** reuniones por Microsoft Teams con representantes de Royal Technology (16 y 23 de octubre de 2026).
+- **Levantamiento de requerimientos:** reuniones por Microsoft Teams con Stalyn De La Torre (Royal Technology) y Amy Alcivar (cliente final) (16 y 23 de octubre de 2026).
 - **Historias de usuario** con criterios de aceptación.
 - **Estimación** con Planning Poker (escala de Fibonacci modificada).
 - **Planificación** con diagrama PERT y cálculo de holguras.

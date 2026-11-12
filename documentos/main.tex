@@ -11,6 +11,7 @@
 \usepackage{longtable}
 \usepackage{array}
 \usepackage{float}
+\usepackage{pdfpages}
 \usepackage{enumitem}
 \usepackage[table]{xcolor}
 \usepackage{tikz}
@@ -27,7 +28,7 @@
 \setlength{\headheight}{14.5pt}
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[L]{\small Royal Technology -- Especificaci\'on de Requerimientos}
+\fancyhead[L]{\small Gold Working -- Especificaci\'on de Requerimientos}
 \fancyhead[R]{\small Ingenier\'ia de Software I}
 \fancyfoot[C]{\thepage}
 
@@ -120,7 +121,7 @@
   {\large FACULTAD DE INGENIER\'IA EN ELECTRICIDAD Y COMPUTACI\'ON}\\[1.2cm]
   {\large Proyecto de Ingenier\'ia de Software I}\\[2pt]{\large Primera evaluaci\'on}\\[0.9cm]
   {\LARGE\bfseries Especificaci\'on de Requerimientos de Software}\\[0.6cm]
-  {\Large Sistema Web de Gesti\'on y Reservas\\ para Royal Technology}\\[1.2cm]
+  {\Large Sistema Web de Gesti\'on y Reservas\\ para Gold Working}\\[1.2cm]
   {\large\bfseries Grupo 3}\\[0.6cm]
   \textbf{Integrantes}\\[2pt]
   Flores Martinez Christopher Mesias\\
@@ -131,7 +132,8 @@
   \textbf{Profesor}\\[4pt]
   Ing. Vanessa Alexandra Jurado Vite\\[0.9cm]
   \textbf{Cliente}\\[4pt]
-  Royal Technology\\[1cm]
+  Gold Working\\[3pt]
+  {\small Proyecto liderado por Royal Technology, empresa de tecnolog\'ia del mismo grupo}\\[1cm]
   Noviembre de 2026
 \end{titlepage}
 
@@ -146,15 +148,15 @@
 \section{Introducci\'on}
 
 \subsection{Definici\'on del problema}
-Actualmente, la gesti\'on operativa de la red de espacios de trabajo corporativos de \textbf{Royal Technology} ---que abarca oficinas privadas, \'areas de coworking, salas de reuniones y estudios de podcast--- se realiza de forma manual mediante agendas f\'isicas, notas adhesivas y hojas de c\'alculo en Excel descentralizadas. Este enfoque genera problemas recurrentes de descoordinaci\'on, p\'erdida de registros de reservas, errores en el seguimiento de cobros y dificultades para consultar la disponibilidad real de los espacios.
+Actualmente, la gesti\'on operativa de la red de espacios de trabajo corporativos de \textbf{Gold Working} ---que abarca oficinas privadas, \'areas de coworking, salas de reuniones y estudios de podcast--- se realiza de forma manual mediante agendas f\'isicas, notas adhesivas y hojas de c\'alculo en Excel descentralizadas. Este enfoque genera problemas recurrentes de descoordinaci\'on, p\'erdida de registros de reservas, errores en el seguimiento de cobros y dificultades para consultar la disponibilidad real de los espacios.
 
 Asimismo, la emisi\'on de facturas, el control de pagos pendientes y la elaboraci\'on de reportes administrativos para la gerencia y el departamento de contabilidad consumen tiempo valioso. Esto evidencia la necesidad de implementar un sistema web centralizado que optimice tanto la atenci\'on comercial como el control administrativo.
 
 \subsection{Contexto del negocio}
-\textbf{Royal Technology} opera una red integral de espacios de trabajo flexibles equipados con tecnolog\'ia moderna, internet de alta velocidad, soporte t\'ecnico, servicios de recepci\'on y \'areas comunes. Las modalidades de alquiler van desde reservas por horas o d\'ias hasta contratos mensuales recurrentes. El objetivo principal de la plataforma digital es modernizar la interacci\'on con los clientes, permitiendo la autogesti\'on de reservas, y estandarizar los flujos de trabajo internos para los administradores, la gerencia y el personal contable.
+\textbf{Gold Working}, empresa del grupo dedicada a los espacios de coworking, opera una red integral de espacios de trabajo flexibles equipados con tecnolog\'ia moderna, internet de alta velocidad, soporte t\'ecnico, servicios de recepci\'on y \'areas comunes. Las modalidades de alquiler van desde reservas por horas o d\'ias hasta contratos mensuales recurrentes. El objetivo principal de la plataforma digital es modernizar la interacci\'on con los clientes, permitiendo la autogesti\'on de reservas, y estandarizar los flujos de trabajo internos para los administradores, la gerencia y el personal contable. La tecnolog\'ia del grupo es administrada por \textbf{Royal Technology}, empresa que lidera este proyecto.
 
 \subsection{Objetivo general}
-Desarrollar un sistema web de gesti\'on y reservas para oficinas privadas, espacios de coworking, salas de reuniones y estudios de podcast en \textbf{Royal Technology}, que automatice la programaci\'on de espacios, el seguimiento de clientes, el control de facturaci\'on y la generaci\'on de m\'etricas administrativas para optimizar la eficiencia operativa del negocio.
+Desarrollar un sistema web de gesti\'on y reservas para oficinas privadas, espacios de coworking, salas de reuniones y estudios de podcast en \textbf{Gold Working}, que automatice la programaci\'on de espacios, el seguimiento de clientes, el control de facturaci\'on y la generaci\'on de m\'etricas administrativas para optimizar la eficiencia operativa del negocio.
 
 \subsection{Objetivos espec\'ificos}
 \begin{itemize}
@@ -168,7 +170,7 @@ Desarrollar un sistema web de gesti\'on y reservas para oficinas privadas, espac
 \end{itemize}
 
 \subsection{Alcance del proyecto}
-El sistema de gesti\'on de \textbf{Royal Technology} abarcar\'a las funcionalidades requeridas para los roles de cliente y administrador, estructuradas en tres sprints:
+El sistema de gesti\'on de \textbf{Gold Working} abarcar\'a las funcionalidades requeridas para los roles de cliente y administrador, estructuradas en tres sprints:
 \begin{itemize}
   \item \textbf{M\'odulo comercial y de consultas (Sprint 1):} gesti\'on de tarifarios, consulta de disponibilidad por fecha y hora, exploraci\'on de espacios por parte del cliente y registro de clientes y prospectos con su historial.
   \item \textbf{M\'odulo de reservas y facturaci\'on (Sprint 2):} reservas anticipadas con datos de facturaci\'on, emisi\'on de facturas, control de pagos y carga de comprobantes de pago por parte del cliente.
@@ -176,7 +178,7 @@ El sistema de gesti\'on de \textbf{Royal Technology} abarcar\'a las funcionalida
 \end{itemize}
 
 \subsection{Metodolog\'ia y t\'ecnicas de levantamiento}
-El equipo adopt\'o una metodolog\'ia \'agil basada en Scrum, en la que Royal Technology act\'ua como cliente y Product Owner. Los requerimientos se levantaron mediante dos reuniones por Microsoft Teams: la primera con el Sr. Stalyn De La Torre, de Royal Technology, quien act\'ua como intermediario, y la segunda con la Sra. Amy Alcivar, cliente final del proyecto. Luego se especificaron como historias de usuario con criterios de aceptaci\'on, se estimaron con Planning Poker y se complementaron con un prototipo navegable. Las actas de las reuniones se encuentran en el Ap\'endice~\ref{app:reuniones}, y el prototipo y las evidencias de levantamiento, en el repositorio de la Secci\'on~\ref{sec:enlaces}.
+El equipo adopt\'o una metodolog\'ia \'agil basada en Scrum, en la que Gold Working act\'ua como cliente y Royal Technology, empresa de tecnolog\'ia del mismo grupo que lidera el proyecto, como Product Owner. Los requerimientos se levantaron mediante dos reuniones por Microsoft Teams: la primera con el Sr. Stalyn De La Torre, de Royal Technology, quien act\'ua como intermediario, y la segunda con la Sra. Amy Alcivar, cliente final del proyecto. Luego se especificaron como historias de usuario con criterios de aceptaci\'on, se estimaron con Planning Poker y se complementaron con un prototipo navegable. Las actas de las reuniones se encuentran en el Ap\'endice~\ref{app:reuniones}, y el prototipo y las evidencias de levantamiento, en el repositorio de la Secci\'on~\ref{sec:enlaces}.
 
 % ================= 2. REQUERIMIENTOS =================
 \section{Requerimientos del sistema}
@@ -418,7 +420,7 @@ El Sprint 1 supera en un punto la velocidad ideal (21 frente a 20) debido a la i
 
 % ================= 4. PROTOTIPO =================
 \section{Prototipo del sistema}
-El prototipo funcional se desarroll\'o en HTML, CSS y JavaScript y simula los flujos principales del sistema web de Royal Technology: el cat\'alogo y la consulta de disponibilidad, la reserva con facturaci\'on, la carga y aprobaci\'on de comprobantes de pago, y el panel administrativo con m\'etricas, cancelaciones con saldo a favor e incidencias. Las capturas de pantalla y el flujo de ventanas se presentan en el Ap\'endice~\ref{app:prototipo}, y el c\'odigo se encuentra en el repositorio indicado en la Secci\'on~\ref{sec:enlaces}.
+El prototipo funcional se desarroll\'o en HTML, CSS y JavaScript y simula los flujos principales del sistema web de Gold Working: el cat\'alogo y la consulta de disponibilidad, la reserva con facturaci\'on, la carga y aprobaci\'on de comprobantes de pago, y el panel administrativo con m\'etricas, cancelaciones con saldo a favor e incidencias. Las capturas de pantalla y el flujo de ventanas se presentan en el Ap\'endice~\ref{app:prototipo}, y el c\'odigo se encuentra en el repositorio indicado en la Secci\'on~\ref{sec:enlaces}.
 
 % ================= 5. ENLACES =================
 \section{Enlaces del proyecto}\label{sec:enlaces}
@@ -429,7 +431,7 @@ El prototipo funcional se desarroll\'o en HTML, CSS y JavaScript y simula los fl
 
 % ================= 6. REUNIONES =================
 \section{Registro de reuniones con el cliente}
-La Tabla~\ref{tab:reuniones} lista las reuniones realizadas por Microsoft Teams con representantes de Royal Technology. Las actas correspondientes se incluyen en el Ap\'endice~\ref{app:reuniones}.
+La Tabla~\ref{tab:reuniones} lista las reuniones realizadas por Microsoft Teams con representantes de Royal Technology y del cliente final. Las actas correspondientes se incluyen en el Ap\'endice~\ref{app:reuniones}.
 
 \begin{table}[H]
 \centering
@@ -511,7 +513,7 @@ Cada historia sigue el formato \textit{Como} [rol], \textit{quiero} [funcionalid
 
 \hu{HU-05}{Cancelaci\'on o postergaci\'on con saldo a favor}{Cliente / Administrador}{Should}{8}{Sprint 3}
 {Como cliente, quiero cancelar o postergar una reserva y conservar un saldo a favor, para aplicarlo a futuros alquileres.}
-{\item Una reserva se puede cancelar o postergar seg\'un las condiciones definidas por Royal Technology.
+{\item Una reserva se puede cancelar o postergar seg\'un las condiciones definidas por Gold Working.
  \item Al cancelar o postergar, el sistema registra el saldo a favor del cliente.
  \item El saldo a favor puede aplicarse como descuento en una nueva reserva.
  \item Al postergar, el horario original queda libre y la nueva fecha debe estar disponible.}
@@ -675,8 +677,8 @@ Se adjuntan las actas de las dos reuniones por Microsoft Teams registradas en la
 
 \let\actanp\relax
 \acta{Reuni\'on \#1: presentaci\'on del proyecto}{16 de octubre de 2026}{Microsoft Teams}{10:30 -- 11:00}
-{Stalyn De La Torre & Intermediario (Royal Technology) \\ \hline}
-{\item Explicaci\'on del rol de Royal Technology como intermediario entre el cliente final y el equipo de desarrollo.}
+{Stalyn De La Torre & Representante de Royal Technology \\ \hline}
+{\item Presentaci\'on del proyecto y del rol de Royal Technology como l\'ider del proyecto frente a Gold Working.}
 {reunion_0.png}
 
 \let\actanp\newpage
@@ -685,50 +687,10 @@ Se adjuntan las actas de las dos reuniones por Microsoft Teams registradas en la
 {\item Levantamiento de los requerimientos del sistema de gesti\'on y reservas de espacios.}
 {reunion_1.png}
 
-\newpage
+
+\clearpage
+\phantomsection
 \section{Acta de conformidad del cliente}\label{app:acta}
-
-\IfFileExists{acta_firmada.png}{%
-  Acta de conformidad firmada por la cliente final del proyecto.\par\medskip
-  \centerline{\includegraphics[width=0.92\textwidth,height=0.82\textheight,keepaspectratio]{acta_firmada.png}}
-}{%
-\IfFileExists{acta_firmada.jpg}{%
-  Acta de conformidad firmada por la cliente final del proyecto.\par\medskip
-  \centerline{\includegraphics[width=0.92\textwidth,height=0.82\textheight,keepaspectratio]{acta_firmada.jpg}}
-}{%
-
-\begin{center}
-  {\large\bfseries ESCUELA SUPERIOR POLIT\'ECNICA DEL LITORAL}\\
-  FACULTAD DE INGENIER\'IA EN ELECTRICIDAD Y COMPUTACI\'ON\\
-  INGENIER\'IA DE SOFTWARE I\\[1em]
-  {\Large\bfseries ACTA DE CONFORMIDAD}
-\end{center}
-
-\vspace{0.8cm}
-Guayaquil, \pend{fecha}.
-
-\vspace{0.5cm}
-Yo, \textbf{Amy Alcivar}, en calidad de cliente final del proyecto, declaro que he revisado el documento de Especificaci\'on de Requerimientos de Software del Sistema Web de Gesti\'on y Reservas, elaborado por el Grupo 3 de la materia Ingenier\'ia de Software I, y manifiesto mi \textbf{conformidad} con su contenido, incluidos los requerimientos funcionales, los requerimientos no funcionales y el prototipo presentado.
-
-\vspace{0.5cm}
-El equipo de desarrollo est\'a conformado por:
-\begin{itemize}[nosep]
-  \item Flores Martinez Christopher Mesias
-  \item Villarroel Benitez Victor Adrian
-  \item Fierro Carrion Juan Diego
-  \item Poveda Guerra Jeremias Davide
-  \item Rojas San Andres Eloy Ransesx
-\end{itemize}
-
-\vspace{3cm}
-\begin{center}
-\begin{tabular}{c}
-  \rule{7cm}{0.4pt}\\
-  Firma del cliente final\\
-  Amy Alcivar\\
-  \pend{C\'edula de identidad}
-\end{tabular}
-\end{center}
-}}
+\centerline{\includegraphics[width=0.9\textwidth,height=0.82\textheight,keepaspectratio]{acta_firmada.png}}
 
 \end{document}
