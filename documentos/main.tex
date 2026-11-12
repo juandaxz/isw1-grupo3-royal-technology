@@ -1,0 +1,734 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage[table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage{caption}
+\usepackage{fancyhdr}
+\usepackage[hidelinks]{hyperref}
+
+\captionsetup{font=small,labelfont=bf}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\renewcommand{\arraystretch}{1.2}
+
+\setlength{\headheight}{14.5pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Royal Technology -- Especificaci\'on de Requerimientos}
+\fancyhead[R]{\small Ingenier\'ia de Software I}
+\fancyfoot[C]{\thepage}
+
+% ---------- Utilidades ----------
+\newcommand{\pend}[1]{\textcolor{red}{[#1]}}
+
+% Inserta la imagen si existe; si no, un marcador visible.
+\newcommand{\imgonly}[2]{%
+  \IfFileExists{#1}{\includegraphics[width=#2,height=0.27\textheight,keepaspectratio]{#1}}{%
+    \fbox{\parbox[c][5.5cm][c]{#2}{\centering\textcolor{red}{[Imagen pendiente:\\ \texttt{\detokenize{#1}}]}}}}}
+
+
+% Captura del prototipo con descripción
+\newcommand{\protofig}[3]{%
+  \begin{figure}[H]
+    \centering
+    \imgonly{prototipo_#1.png}{0.88\textwidth}
+    \caption{#2}\label{fig:proto_#1}
+    \par\smallskip
+    \begin{minipage}{0.9\textwidth}\small\textbf{Descripci\'on:} #3\end{minipage}
+  \end{figure}}
+
+% Historia de usuario detallada (Apéndice A)
+\newcommand{\hu}[8]{%
+  \noindent\begin{tabular}{|p{3.1cm}|p{11.9cm}|}
+  \hline
+  \rowcolor{gray!20}\textbf{ID} & \textbf{#1 -- #2} \\ \hline
+  Rol & #3 \\ \hline
+  Prioridad / Puntos / Sprint & #4 \;/\; #5 puntos \;/\; #6 \\ \hline
+  Historia de usuario & #7 \\ \hline
+  Criterios de aceptaci\'on &
+    \vspace{-0.9em}\begin{itemize}[leftmargin=1.2em,nosep]#8\end{itemize}\vspace{-0.6em} \\ \hline
+  \end{tabular}\par\medskip}
+
+% Requerimiento no funcional detallado (Apéndice B)
+\newcommand{\nfr}[6]{%
+  \noindent\begin{tabular}{|p{3.1cm}|p{11.9cm}|}
+  \hline
+  \rowcolor{gray!20}\textbf{ID} & \textbf{#1 -- #2} \\ \hline
+  Clasificaci\'on (Sommerville) & #3 \\ \hline
+  Descripci\'on & #4 \\ \hline
+  Criterio de validaci\'on & #5 \\ \hline
+  M\'etodo de verificaci\'on & #6 \\ \hline
+  \end{tabular}\par\medskip}
+
+% Acta de reunión (Apéndice D): reunión, fecha, lugar, hora, filas de asistentes, orden del día, imagen
+\newcommand{\actanp}{\newpage}
+\newcommand{\acta}[7]{%
+  \actanp
+  \begin{center}
+    {\large\bfseries ESCUELA SUPERIOR POLIT\'ECNICA DEL LITORAL}\\
+    FACULTAD DE INGENIER\'IA EN ELECTRICIDAD Y COMPUTACI\'ON\\
+    INGENIER\'IA DE SOFTWARE I -- GRUPO 3\\[0.8em]
+    {\Large\bfseries ACTA DE REUNI\'ON}
+  \end{center}
+  \begin{tabular}{|p{3.3cm}|p{5.2cm}|p{2.2cm}|p{3.3cm}|}
+    \hline
+    \textbf{Reuni\'on} & #1 & \textbf{Fecha} & #2 \\ \hline
+    \textbf{Lugar} & #3 & \textbf{Hora} & #4 \\ \hline
+  \end{tabular}
+
+  \medskip
+  \textbf{Asistencia}\\[2pt]
+  \begin{tabular}{|p{8cm}|p{6.5cm}|}
+    \hline
+    \textbf{Nombres} & \textbf{Cargo} \\ \hline
+    #5
+    Flores Martinez Christopher Mesias & Equipo de desarrollo \\ \hline
+    Villarroel Benitez Victor Adrian & Equipo de desarrollo \\ \hline
+    Fierro Carrion Juan Diego & Equipo de desarrollo \\ \hline
+    Poveda Guerra Jeremias Davide & Equipo de desarrollo \\ \hline
+    Rojas San Andres Eloy Ransesx & Equipo de desarrollo \\ \hline
+  \end{tabular}
+
+  \medskip
+  \textbf{Orden del d\'ia}
+  \begin{itemize}[nosep]#6\end{itemize}
+
+  \textbf{Capturas de pantalla o evidencias}\\[4pt]
+  \centerline{\imgonly{#7}{0.8\textwidth}}}
+
+\begin{document}
+
+% ================= PORTADA =================
+\begin{titlepage}
+  \centering
+  \IfFileExists{espol_logo.png}{\includegraphics[height=3cm]{espol_logo.png}\\[0.8cm]}{%
+    \fbox{\parbox[c][3cm][c]{7cm}{\centering\textcolor{red}{[Logo de ESPOL: \texttt{espol\_logo.png}]}}}\\[1.2cm]}
+  {\large\bfseries ESCUELA SUPERIOR POLIT\'ECNICA DEL LITORAL}\\[4pt]
+  {\large FACULTAD DE INGENIER\'IA EN ELECTRICIDAD Y COMPUTACI\'ON}\\[1.2cm]
+  {\large Proyecto de Ingenier\'ia de Software I}\\[2pt]{\large Primera evaluaci\'on}\\[0.9cm]
+  {\LARGE\bfseries Especificaci\'on de Requerimientos de Software}\\[0.6cm]
+  {\Large Sistema Web de Gesti\'on y Reservas\\ para Royal Technology}\\[1.2cm]
+  {\large\bfseries Grupo 3}\\[0.6cm]
+  \textbf{Integrantes}\\[2pt]
+  Flores Martinez Christopher Mesias\\
+  Villarroel Benitez Victor Adrian\\
+  Fierro Carrion Juan Diego\\
+  Poveda Guerra Jeremias Davide\\
+  Rojas San Andres Eloy Ransesx\\[0.9cm]
+  \textbf{Profesor}\\[4pt]
+  Ing. Vanessa Alexandra Jurado Vite\\[0.9cm]
+  \textbf{Cliente}\\[4pt]
+  Royal Technology\\[1cm]
+  Noviembre de 2026
+\end{titlepage}
+
+\tableofcontents
+\newpage
+\listoftables
+\newpage
+\listoffigures
+\newpage
+
+% ================= 1. INTRODUCCIÓN =================
+\section{Introducci\'on}
+
+\subsection{Definici\'on del problema}
+Actualmente, la gesti\'on operativa de la red de espacios de trabajo corporativos de \textbf{Royal Technology} ---que abarca oficinas privadas, \'areas de coworking, salas de reuniones y estudios de podcast--- se realiza de forma manual mediante agendas f\'isicas, notas adhesivas y hojas de c\'alculo en Excel descentralizadas. Este enfoque genera problemas recurrentes de descoordinaci\'on, p\'erdida de registros de reservas, errores en el seguimiento de cobros y dificultades para consultar la disponibilidad real de los espacios.
+
+Asimismo, la emisi\'on de facturas, el control de pagos pendientes y la elaboraci\'on de reportes administrativos para la gerencia y el departamento de contabilidad consumen tiempo valioso. Esto evidencia la necesidad de implementar un sistema web centralizado que optimice tanto la atenci\'on comercial como el control administrativo.
+
+\subsection{Contexto del negocio}
+\textbf{Royal Technology} opera una red integral de espacios de trabajo flexibles equipados con tecnolog\'ia moderna, internet de alta velocidad, soporte t\'ecnico, servicios de recepci\'on y \'areas comunes. Las modalidades de alquiler van desde reservas por horas o d\'ias hasta contratos mensuales recurrentes. El objetivo principal de la plataforma digital es modernizar la interacci\'on con los clientes, permitiendo la autogesti\'on de reservas, y estandarizar los flujos de trabajo internos para los administradores, la gerencia y el personal contable.
+
+\subsection{Objetivo general}
+Desarrollar un sistema web de gesti\'on y reservas para oficinas privadas, espacios de coworking, salas de reuniones y estudios de podcast en \textbf{Royal Technology}, que automatice la programaci\'on de espacios, el seguimiento de clientes, el control de facturaci\'on y la generaci\'on de m\'etricas administrativas para optimizar la eficiencia operativa del negocio.
+
+\subsection{Objetivos espec\'ificos}
+\begin{itemize}
+  \item Registrar y consultar un tarifario centralizado de oficinas privadas, espacios de coworking, salas de reuniones y estudios de podcast.
+  \item Controlar la disponibilidad en tiempo real de los espacios seg\'un la fecha y la hora seleccionadas.
+  \item Permitir a los clientes consultar espacios, precios y caracter\'isticas para realizar reservas con al menos un d\'ia de anticipaci\'on.
+  \item Gestionar una base de datos de clientes e interesados, almacenando su historial de consultas, visitas y estados de contratos.
+  \item Automatizar la emisi\'on de facturas, el registro de comprobantes de pago y el control de cuentas pagadas o pendientes.
+  \item Gestionar cancelaciones y postergaciones de reservas, generando saldos a favor aplicables a futuros alquileres.
+  \item Registrar incidencias operativas y visualizar m\'etricas de visitas, alquileres e ingresos para respaldar auditor\'ias internas.
+\end{itemize}
+
+\subsection{Alcance del proyecto}
+El sistema de gesti\'on de \textbf{Royal Technology} abarcar\'a las funcionalidades requeridas para los roles de cliente y administrador, estructuradas en tres sprints:
+\begin{itemize}
+  \item \textbf{M\'odulo comercial y de consultas (Sprint 1):} gesti\'on de tarifarios, consulta de disponibilidad por fecha y hora, exploraci\'on de espacios por parte del cliente y registro de clientes y prospectos con su historial.
+  \item \textbf{M\'odulo de reservas y facturaci\'on (Sprint 2):} reservas anticipadas con datos de facturaci\'on, emisi\'on de facturas, control de pagos y carga de comprobantes de pago por parte del cliente.
+  \item \textbf{M\'odulo administrativo y de control (Sprint 3):} cancelaci\'on o postergaci\'on de reservas con saldo a favor, recordatorios autom\'aticos, registro de incidencias y visualizaci\'on de m\'etricas y reportes para auditor\'ia.
+\end{itemize}
+
+\subsection{Metodolog\'ia y t\'ecnicas de levantamiento}
+El equipo adopt\'o una metodolog\'ia \'agil basada en Scrum, en la que Royal Technology act\'ua como cliente y Product Owner. Los requerimientos se levantaron mediante dos reuniones por Microsoft Teams: la primera con el Sr. Stalyn De La Torre, de Royal Technology, quien act\'ua como intermediario, y la segunda con la Sra. Amy Alcivar, cliente final del proyecto. Luego se especificaron como historias de usuario con criterios de aceptaci\'on, se estimaron con Planning Poker y se complementaron con un prototipo navegable. Las actas de las reuniones se encuentran en el Ap\'endice~\ref{app:reuniones}, y el prototipo y las evidencias de levantamiento, en el repositorio de la Secci\'on~\ref{sec:enlaces}.
+
+% ================= 2. REQUERIMIENTOS =================
+\section{Requerimientos del sistema}
+
+\subsection{Requerimientos funcionales}
+Los requerimientos funcionales se especificaron mediante historias de usuario agrupadas por m\'odulos operativos. La Tabla~\ref{tab:funcionales} presenta el resumen del backlog, priorizado con el esquema MoSCoW (\textit{Must}: imprescindible; \textit{Should}: importante) y estimado con Planning Poker. El detalle de cada historia, con su rol, narrativa y criterios de aceptaci\'on, se encuentra en el Ap\'endice~\ref{app:hu}; la columna \textit{Ref.} indica el orden de la historia en ese ap\'endice.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Resumen de requerimientos funcionales (historias de usuario)}
+\label{tab:funcionales}
+\begin{tabular}{c c p{6.4cm} c c c}
+\toprule
+\textbf{Ref.} & \textbf{ID} & \textbf{Historia de usuario / descripci\'on} & \textbf{Prioridad} & \textbf{Puntos} & \textbf{Sprint} \\
+\midrule
+A.1 & HU-01 & Registro y consulta del tarifario de oficinas, coworking, salas de reuniones y podcast. & Must & 5 & 1 \\
+A.2 & HU-02 & Consulta de disponibilidad de espacios filtrada por fecha y horario de uso. & Must & 8 & 1 \\
+A.3 & HU-03 & Consulta del cat\'alogo de espacios, precios e inclusiones previa a la reserva (cliente). & Must & 3 & 1 \\
+A.4 & HU-08 & Registro e historial de clientes y prospectos, estado de solicitudes y visitas. & Must & 5 & 1 \\
+\midrule
+A.5 & HU-04 & Reserva anticipada de espacios (m\'inimo un d\'ia) con captura de datos de facturaci\'on. & Must & 8 & 2 \\
+A.6 & HU-06 & Emisi\'on de facturas detalladas y seguimiento de su estado (pagada o pendiente). & Must & 8 & 2 \\
+A.7 & HU-07 & Carga e integraci\'on del comprobante de pago o transferencia por el cliente. & Should & 3 & 2 \\
+\midrule
+A.8 & HU-05 & Cancelaci\'on o postergaci\'on de reserva con registro de saldo a favor del cliente. & Should & 8 & 3 \\
+A.9 & HU-09 & Recepci\'on de alertas y recordatorios autom\'aticos de reservas y cobros pendientes. & Should & 3 & 3 \\
+A.10 & HU-10 & Registro de incidencias operativas y panel de m\'etricas (visitas, alquileres, ingresos). & Must & 8 & 3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Requerimientos no funcionales}
+Los requerimientos no funcionales se clasifican seg\'un la taxonom\'ia de \textbf{Ian Sommerville}, que los divide en tres grandes grupos: \textit{requerimientos del producto} (usabilidad, eficiencia, confiabilidad y seguridad), \textit{requerimientos organizacionales} (de entorno, operacionales y de desarrollo) y \textit{requerimientos externos} (regulatorios, \'eticos y legislativos). Cada requerimiento incluye un criterio de validaci\'on medible para la fase de pruebas (Tabla~\ref{tab:nofuncionales}). El detalle y el m\'etodo de verificaci\'on se encuentran en el Ap\'endice~\ref{app:nfr}; la columna \textit{Ref.} indica el orden del requerimiento en ese ap\'endice.
+
+\begin{longtable}{@{}p{1.45cm} p{0.9cm} p{2.7cm} p{4.0cm} p{4.6cm}@{}}
+\caption{Clasificaci\'on de requerimientos no funcionales y criterios de validaci\'on}\label{tab:nofuncionales}\\
+\toprule
+\textbf{ID} & \textbf{Ref.} & \textbf{Clasificaci\'on (Sommerville)} & \textbf{Requerimiento} & \textbf{Criterio de validaci\'on} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Ref.} & \textbf{Clasificaci\'on (Sommerville)} & \textbf{Requerimiento} & \textbf{Criterio de validaci\'on} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+NFR-01 & B.1 & Externo -- Legislativo & Cumplimiento de la legislaci\'on vigente de protecci\'on de datos personales. & Los datos personales de un titular se eliminan en un plazo $\leq$ 30 d\'ias tras su solicitud. \\
+NFR-02 & B.2 & Producto -- Seguridad & Control de acceso basado en roles (administraci\'on, gerencia y clientes). & Todo intento de acceso a un panel sin los permisos adecuados es bloqueado autom\'aticamente. \\
+NFR-03 & B.3 & Producto -- Confiabilidad & Alta disponibilidad de la plataforma para asegurar la continuidad comercial. & Disponibilidad mensual $\geq$ 99,0\,\% y conmutaci\'on autom\'atica por falla en $\leq$ 60 s. \\
+NFR-04 & B.4 & Producto -- Eficiencia (rendimiento) & Respuesta \'agil en la navegaci\'on y en la consulta de espacios. & Tiempo de respuesta inicial de la p\'agina $\leq$ 7 s, y $\leq$ 2 s con cach\'e. \\
+NFR-05 & B.5 & Producto -- Usabilidad & Curva de aprendizaje corta para administraci\'on y atenci\'on al cliente. & Un usuario nuevo completa el flujo b\'asico de reserva sin ayuda tras $\leq$ 30 min de capacitaci\'on. \\
+NFR-06 & B.6 & Producto -- Eficiencia (carga) & Soporte de usuarios concurrentes sin degradar el servicio. & Tiempo de respuesta promedio $\leq$ 5 s con 10 usuarios concurrentes y uso de CPU $\leq$ 75\,\%. \\
+NFR-07 & B.7 & Producto -- Seguridad (auditor\'ia) & Registro de auditor\'ia de los cambios de permisos y configuraciones. & Toda modificaci\'on de roles o permisos queda registrada en un log de auditor\'ia con usuario y fecha. \\
+NFR-08 & B.8 & Producto -- Confiabilidad (recuperaci\'on) & Copias de seguridad autom\'aticas y restauraci\'on de datos. & Respaldos incrementales cada 15 min y restauraci\'on a un punto en el tiempo comprobada. \\
+NFR-09 & B.9 & Producto -- Seguridad (tr\'ansito) & Cifrado de las comunicaciones cliente-servidor mediante HTTPS. & Redirecci\'on autom\'atica de HTTP a HTTPS con certificado TLS 1.2 o superior v\'alido. \\
+NFR-10 & B.10 & Producto -- Usabilidad (dise\~no) & Interfaz intuitiva y adaptable a dispositivos m\'oviles. & Las pantallas se adaptan a un m\'ovil sin desplazamiento horizontal ni necesidad de ampliar. \\
+NFR-11 & B.11 & Organizacional -- Entorno & Compatibilidad con los navegadores web modernos de mayor uso. & Operaci\'on sin errores de renderizado en las versiones recientes de Chrome, Firefox, Safari y Edge. \\
+NFR-12 & B.12 & Externo -- Regulatorio (est\'andar) & Cumplimiento de las pautas de accesibilidad WCAG 2.1. & Contraste de texto de nivel AA y navegaci\'on completa por teclado. \\
+NFR-13 & B.13 & Producto -- Eficiencia (tiempo real) & Sincronizaci\'on de los estados de reserva entre usuarios conectados. & Un cambio de reserva es visible para los dem\'as usuarios conectados en $\leq$ 2 s. \\
+NFR-14 & B.14 & Producto -- Seguridad (reposo) & Cifrado de los datos sensibles almacenados en la base de datos. & Los datos sensibles se almacenan cifrados con AES-128 o superior. \\
+\end{longtable}
+
+La Tabla~\ref{tab:distribucion} resume la distribuci\'on de los requerimientos por categor\'ia.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Distribuci\'on de los requerimientos no funcionales por categor\'ia de Sommerville}
+\label{tab:distribucion}
+\begin{tabular}{l l c l}
+\toprule
+\textbf{Grupo} & \textbf{Categor\'ia} & \textbf{Cantidad} & \textbf{IDs} \\
+\midrule
+Producto & Usabilidad & 2 & NFR-05, NFR-10 \\
+Producto & Eficiencia & 3 & NFR-04, NFR-06, NFR-13 \\
+Producto & Confiabilidad & 2 & NFR-03, NFR-08 \\
+Producto & Seguridad & 4 & NFR-02, NFR-07, NFR-09, NFR-14 \\
+Organizacional & Entorno & 1 & NFR-11 \\
+Externo & Legislativo & 1 & NFR-01 \\
+Externo & Regulatorio & 1 & NFR-12 \\
+\midrule
+\multicolumn{2}{l}{\textbf{Total}} & \textbf{14} & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ================= 3. PLANIFICACIÓN =================
+\section{Planificaci\'on y control del proyecto}
+
+\subsection{Gesti\'on \'agil y tablero del proyecto}
+Para el seguimiento de las actividades, el equipo adopt\'o Scrum y utiliz\'o \textbf{Trello} como plataforma de gesti\'on de tareas y control del \textit{Product Backlog}. Se configur\'o un tablero p\'ublico con las columnas \textit{Product Backlog}, \textit{Sprint 1}, \textit{Sprint 2}, \textit{Sprint 3}, \textit{En progreso} y \textit{Hecho}. Trello se eligi\'o por su interfaz basada en tarjetas y tableros Kanban, que facilit\'o la colaboraci\'on simult\'anea de todos los integrantes sin una curva de aprendizaje compleja.
+
+\begin{figure}[H]
+  \centering
+  \imgonly{sprint_planning.png}{0.95\textwidth}
+  \caption{Planificaci\'on de sprints en Trello}
+  \label{fig:trello}
+\end{figure}
+
+\subsection{Estimaci\'on con Planning Poker}
+Para determinar el esfuerzo relativo de cada requerimiento se aplic\'o la t\'ecnica \textbf{Planning Poker} con la escala de Fibonacci modificada (1, 2, 3, 5, 8, 13), mediante una herramienta en l\'inea. Cada historia fue votada de forma simult\'anea por el equipo; ante discrepancias significativas se abri\'o un espacio de debate para aclarar casos de borde y reglas de negocio, hasta alcanzar consenso. La Tabla~\ref{tab:estimacion} resume el resultado.
+
+\begin{figure}[H]
+  \centering
+  \imgonly{poker.png}{0.95\textwidth}
+  \caption{Sesi\'on de estimaci\'on con Planning Poker}
+  \label{fig:poker}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Estimaci\'on de esfuerzo del Product Backlog con Planning Poker}
+\label{tab:estimacion}
+\begin{tabular}{c p{7cm} c c}
+\toprule
+\textbf{ID} & \textbf{Descripci\'on breve} & \textbf{Rango de votos} & \textbf{Puntos} \\
+\midrule
+HU-01 & Registro y consulta del tarifario de espacios & 2--8 & 5 \\
+HU-02 & Consulta de disponibilidad por fecha y hora & 5--8 & 8 \\
+HU-03 & Consulta de espacios, precios e inclusiones & 3--5 & 3 \\
+HU-04 & Reserva anticipada con datos de facturaci\'on & 5--8 & 8 \\
+HU-05 & Cancelaci\'on o postergaci\'on con saldo a favor & 5--8 & 8 \\
+HU-06 & Emisi\'on de facturas y control de cobros & 5--8 & 8 \\
+HU-07 & Adjuntar comprobante de pago en el sistema & 3--5 & 3 \\
+HU-08 & Registro e historial de clientes y prospectos & 5--8 & 5 \\
+HU-09 & Recordatorios de reservas y pagos pendientes & 3--5 & 3 \\
+HU-10 & Registro de incidencias y m\'etricas de auditor\'ia & 3--13 & 8 \\
+\midrule
+\textbf{Total} & \textbf{Acumulado del backlog} & & \textbf{59} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Velocidad del equipo y n\'umero de sprints}
+El backlog consta de 10 historias de usuario que suman 59 puntos. Con una velocidad promedio estimada de 20 puntos por sprint, el n\'umero de sprints es:
+\begin{equation}
+  \text{N\'umero de sprints} = \frac{\text{puntos del backlog}}{\text{velocidad promedio}} = \frac{59}{20} = 2{,}95 \;\Rightarrow\; 3 \text{ sprints}
+\end{equation}
+
+\subsection{An\'alisis PERT y c\'alculo de holguras}
+Las historias de usuario se agruparon seg\'un sus dependencias funcionales: primero la consulta y el control de disponibilidad; luego el flujo transaccional de reservas y facturaci\'on; y, al final, las herramientas de posventa, alertas e incidencias. La Tabla~\ref{tab:pert} presenta la matriz PERT (tiempos en d\'ias) y la Figura~\ref{fig:pert} el diagrama de actividad en la flecha. La duraci\'on total del proyecto es de 33 d\'ias y la ruta cr\'itica es B--D--E--H--J (HU-02, HU-08, HU-04, HU-05 y HU-10).
+
+\begin{table}[H]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\caption[Matriz PERT: tiempos tempranos, tard\'ios y holguras]{Matriz PERT: tiempos tempranos, tard\'ios y holguras (ES/EF: inicio/fin temprano; LS/LF: inicio/fin tard\'io; Pers.: personas asignadas)}
+\label{tab:pert}
+\begin{tabular}{c c p{3.4cm} c c c c c c c c c}
+\toprule
+\textbf{ID} & \textbf{HU} & \textbf{Descripci\'on} & \textbf{Pred.} & \textbf{Dur.} & \textbf{ES} & \textbf{EF} & \textbf{LS} & \textbf{LF} & \textbf{Holg.} & \textbf{Pers.} & \textbf{Sprint} \\
+\midrule
+A & HU-01 & Tarifario de espacios & -- & 4 & 0 & 4 & 29 & 33 & 29 & 1 & 1 \\
+B & HU-02 & Consulta de disponibilidad & -- & 7 & 0 & 7 & 0 & 7 & 0 & 1 & 1 \\
+C & HU-03 & Cat\'alogo y precios & B & 5 & 7 & 12 & 28 & 33 & 21 & 1 & 1 \\
+D & HU-08 & Registro de clientes & B & 5 & 7 & 12 & 7 & 12 & 0 & 1 & 1 \\
+E & HU-04 & Reserva anticipada & D & 7 & 12 & 19 & 12 & 19 & 0 & 1 & 2 \\
+F & HU-06 & Emisi\'on de facturas & E & 6 & 19 & 25 & 27 & 33 & 8 & 1 & 2 \\
+G & HU-07 & Comprobante de pago & E & 4 & 19 & 23 & 29 & 33 & 10 & 1 & 2 \\
+H & HU-05 & Cancelaci\'on y saldo & E & 7 & 19 & 26 & 19 & 26 & 0 & 1 & 3 \\
+I & HU-09 & Alertas y recordatorios & H & 4 & 26 & 30 & 29 & 33 & 3 & 1 & 3 \\
+J & HU-10 & Incidencias y m\'etricas & H & 7 & 26 & 33 & 26 & 33 & 0 & 1 & 3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  ev/.style={circle,draw,minimum size=8mm,inner sep=0pt,font=\small\bfseries,fill=white},
+  act/.style={-{Stealth[length=2.5mm]},thick},
+  crit/.style={-{Stealth[length=2.5mm]},very thick,red},
+  dum/.style={-{Stealth[length=2.5mm]},thick,dashed},
+  critdum/.style={-{Stealth[length=2.5mm]},very thick,red,dashed},
+  lab/.style={font=\scriptsize,fill=white,inner sep=1.5pt}]
+  % Eventos con tiempos EET | LET
+  \node[ev,label={[font=\scriptsize]above:{0 | 0}}] (n1) at (0,0) {1};
+  \node[ev,label={[font=\scriptsize]above:{7 | 7}}] (n2) at (3,0) {2};
+  \node[ev,label={[font=\scriptsize]above:{12 | 12}}] (n3) at (6,0) {3};
+  \node[ev,label={[font=\scriptsize]above left:{19 | 19}}] (n4) at (9,0) {4};
+  \node[ev,label={[font=\scriptsize]above left:{26 | 26}}] (n5) at (12,1.3) {5};
+  \node[ev,label={[font=\scriptsize]below:{23 | 33}}] (n7) at (12,-1.3) {7};
+  \node[ev,label={[font=\scriptsize]above:{33 | 33}}] (n8) at (14.3,2.9) {8};
+  \node[ev,label={[font=\scriptsize]right:{33 | 33}}] (n6) at (16,0) {6};
+  % Actividades críticas
+  \draw[crit] (n1) -- node[lab,above]{B: HU-02 (7)} (n2);
+  \draw[crit] (n2) -- node[lab,above]{D: HU-08 (5)} (n3);
+  \draw[crit] (n3) -- node[lab,above]{E: HU-04 (7)} (n4);
+  \draw[crit] (n4) -- node[lab,above,sloped]{H: HU-05 (7)} (n5);
+  \draw[crit] (n5) -- node[lab,above,sloped]{J: HU-10 (7)} (n8);
+  \draw[critdum] (n8) -- (n6);
+  % Actividades no críticas
+  \draw[act] (n4) -- node[lab,above,pos=.35]{F: HU-06 (6)} (n6);
+  \draw[act] (n4) -- node[lab,below,sloped]{G: HU-07 (4)} (n7);
+  \draw[dum] (n7) -- (n6);
+  \draw[act] (n5) -- node[lab,below,sloped,pos=.55]{I: HU-09 (4)} (n6);
+  \draw[act] (n1) .. controls (2,5.6) and (14,5.6) .. node[lab,pos=.5]{A: HU-01 (4)} (n6);
+  \draw[act] (n2) .. controls (6,-4) and (13,-4) .. node[lab,pos=.5]{C: HU-03 (5)} (n6);
+\end{tikzpicture}}
+\caption{Diagrama PERT (actividad en la flecha) del proyecto; sobre cada evento: tiempo temprano | tiempo tard\'io. En rojo, la ruta cr\'itica; l\'ineas punteadas, actividades ficticias}
+\label{fig:pert}
+\end{figure}
+
+\subsection{Histograma de recursos}
+La Figura~\ref{fig:histograma} muestra la carga de personas por d\'ia seg\'un el cronograma temprano del PERT, con una persona asignada a cada actividad. El pico es de 3 personas entre los d\'ias 20 y 23, cuando se ejecutan en paralelo las actividades F, G y H. Esta carga est\'a por debajo de la capacidad del equipo (5 personas), por lo que no se requiere nivelaci\'on de recursos ni se extiende la duraci\'on de 33 d\'ias del proyecto. Las actividades cr\'iticas (B, D, E, H y J) se muestran en rojo y las que tienen holgura, en gris.
+
+\begin{figure}[H]
+  \centering
+  \IfFileExists{histograma_recursos.png}{\includegraphics[width=0.95\textwidth]{histograma_recursos.png}}{\imgonly{histograma_recursos.png}{0.9\textwidth}}
+  \caption{Histograma de recursos del proyecto}
+  \label{fig:histograma}
+\end{figure}
+
+\subsection{Distribuci\'on de sprints y carga de trabajo}
+La distribuci\'on definitiva de las historias de usuario por sprint se muestra en la Tabla~\ref{tab:sprints}.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Distribuci\'on de sprints y carga de trabajo}
+\label{tab:sprints}
+\begin{tabular}{c p{7cm} c}
+\toprule
+\textbf{Sprint} & \textbf{Historias de usuario asignadas} & \textbf{Puntos} \\
+\midrule
+Sprint 1 & HU-01, HU-02, HU-03, HU-08 & 21 \\
+Sprint 2 & HU-04, HU-06, HU-07 & 19 \\
+Sprint 3 & HU-05, HU-09, HU-10 & 19 \\
+\midrule
+\textbf{Total} & \textbf{Ejecuci\'on completa del Product Backlog} & \textbf{59} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+El Sprint 1 supera en un punto la velocidad ideal (21 frente a 20) debido a la indivisibilidad de los valores de la escala de Fibonacci. El equipo prefiri\'o asumir ese punto adicional en lugar de fragmentar el alcance en un cuarto sprint.
+
+% ================= 4. PROTOTIPO =================
+\section{Prototipo del sistema}
+El prototipo funcional se desarroll\'o en HTML, CSS y JavaScript y simula los flujos principales del sistema web de Royal Technology: el cat\'alogo y la consulta de disponibilidad, la reserva con facturaci\'on, la carga y aprobaci\'on de comprobantes de pago, y el panel administrativo con m\'etricas, cancelaciones con saldo a favor e incidencias. Las capturas de pantalla y el flujo de ventanas se presentan en el Ap\'endice~\ref{app:prototipo}, y el c\'odigo se encuentra en el repositorio indicado en la Secci\'on~\ref{sec:enlaces}.
+
+% ================= 5. ENLACES =================
+\section{Enlaces del proyecto}\label{sec:enlaces}
+\begin{itemize}
+  \item Repositorio p\'ublico (prototipo y evidencias de levantamiento de requerimientos): \url{https://github.com/juandaxz/isw1-grupo3-royal-technology}
+  \item Tablero p\'ublico de Trello: \url{https://trello.com/b/iU1pm31B/sprint-planning}
+\end{itemize}
+
+% ================= 6. REUNIONES =================
+\section{Registro de reuniones con el cliente}
+La Tabla~\ref{tab:reuniones} lista las reuniones realizadas por Microsoft Teams con representantes de Royal Technology. Las actas correspondientes se incluyen en el Ap\'endice~\ref{app:reuniones}.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Reuniones con el cliente}
+\label{tab:reuniones}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{c p{2.4cm} p{1.9cm} c p{3.4cm} p{3.4cm}}
+\toprule
+\textbf{N.\textsuperscript{o}} & \textbf{Fecha} & \textbf{Medio} & \textbf{Duraci\'on} & \textbf{Participantes} & \textbf{Objetivo} \\
+\midrule
+1 & 16 de octubre de 2026 & Microsoft Teams & 30 min & Stalyn De La Torre (Royal Technology) y los 5 integrantes del equipo & Presentaci\'on del proyecto y del rol de Royal Technology como intermediario entre el cliente final y el equipo \\
+2 & 23 de octubre de 2026 & Microsoft Teams & 60 min & Amy Alcivar (cliente final) y los 5 integrantes del equipo & Levantamiento de requerimientos del sistema \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ================= APÉNDICES =================
+\appendix
+\newpage
+
+\section{Historias de usuario}\label{app:hu}
+Cada historia sigue el formato \textit{Como} [rol], \textit{quiero} [funcionalidad], \textit{para} [beneficio], con criterios de aceptaci\'on verificables.
+
+\subsection*{Sprint 1: m\'odulo comercial y de consultas}
+
+\hu{HU-01}{Tarifario de espacios}{Administrador}{Must}{5}{Sprint 1}
+{Como administrador, quiero registrar y consultar el tarifario de oficinas privadas, coworking, salas de reuniones y estudios de podcast, para mantener los precios centralizados y actualizados.}
+{\item Se puede registrar una tarifa indicando el tipo de espacio, la modalidad (por hora, por d\'ia o mensual) y el precio.
+ \item El tarifario se puede consultar completo y filtrado por tipo de espacio.
+ \item Una tarifa existente se puede editar y el cambio se refleja en las consultas posteriores.
+ \item No se permite guardar una tarifa sin tipo de espacio, modalidad o con un precio no v\'alido (menor o igual a cero).}
+
+\hu{HU-02}{Consulta de disponibilidad}{Administrador}{Must}{8}{Sprint 1}
+{Como administrador, quiero consultar la disponibilidad de los espacios seg\'un la fecha y el horario, para conocer en tiempo real qu\'e espacios pueden alquilarse.}
+{\item Al seleccionar una fecha y un rango horario, el sistema muestra los espacios disponibles y los ocupados.
+ \item La disponibilidad se actualiza de inmediato cuando se confirma o se cancela una reserva.
+ \item El sistema no permite consultar un rango en el que la hora de fin sea anterior o igual a la de inicio.
+ \item Se puede filtrar el resultado por tipo de espacio.}
+
+\hu{HU-03}{Cat\'alogo de espacios}{Cliente}{Must}{3}{Sprint 1}
+{Como cliente, quiero consultar los espacios, sus precios y lo que incluyen, para decidir qu\'e espacio reservar.}
+{\item El cat\'alogo muestra, por cada espacio, su tipo, precio seg\'un modalidad e inclusiones (por ejemplo, internet, soporte t\'ecnico y recepci\'on).
+ \item El cliente puede filtrar el cat\'alogo por tipo de espacio.
+ \item Los precios mostrados corresponden a los vigentes en el tarifario.
+ \item El cliente puede pasar del cat\'alogo a la reserva de un espacio.}
+
+\hu{HU-08}{Registro e historial de clientes y prospectos}{Administrador}{Must}{5}{Sprint 1}
+{Como administrador, quiero registrar a los clientes e interesados y conservar su historial, para dar seguimiento comercial a sus consultas, visitas y contratos.}
+{\item Se puede registrar un cliente o prospecto con sus datos de contacto.
+ \item Cada registro conserva el historial de consultas, visitas y el estado de la solicitud o del contrato.
+ \item Se pueden buscar clientes y prospectos por nombre y por estado.
+ \item Un prospecto puede convertirse en cliente sin duplicar su informaci\'on.}
+
+\subsection*{Sprint 2: m\'odulo de reservas y facturaci\'on}
+
+\hu{HU-04}{Reserva anticipada}{Cliente}{Must}{8}{Sprint 2}
+{Como cliente, quiero reservar un espacio con al menos un d\'ia de anticipaci\'on e ingresar mis datos de facturaci\'on, para asegurar su uso en la fecha y el horario requeridos.}
+{\item Solo se pueden seleccionar espacios disponibles en la fecha y el horario elegidos.
+ \item El sistema rechaza reservas con menos de un d\'ia de anticipaci\'on y muestra un mensaje explicativo.
+ \item Los datos de facturaci\'on (RUC o identificaci\'on fiscal y direcci\'on) son obligatorios para confirmar la reserva; mientras falten, el bot\'on de reservar permanece inhabilitado.
+ \item Al confirmar, el espacio queda no disponible para ese horario y se muestra el resumen de la reserva.}
+
+\hu{HU-06}{Emisi\'on de facturas}{Administrador}{Must}{8}{Sprint 2}
+{Como administrador, quiero emitir facturas detalladas y conocer su estado, para controlar las cuentas pagadas y pendientes.}
+{\item A partir de una reserva se emite una factura con numeraci\'on secuencial, los datos del cliente, el espacio, el per\'iodo y el importe, e indica el plazo de cinco d\'ias laborables para el pago.
+ \item Cada factura tiene un estado: pagada o pendiente.
+ \item El listado de facturas se puede filtrar por estado y por cliente.
+ \item Al registrarse el pago, el estado de la factura cambia a pagada.}
+
+\hu{HU-07}{Comprobante de pago}{Cliente}{Should}{3}{Sprint 2}
+{Como cliente, quiero cargar el comprobante de mi pago o transferencia, para que mi pago sea verificado y registrado.}
+{\item El cliente puede adjuntar un comprobante (imagen o PDF) a una factura pendiente.
+ \item El comprobante queda asociado a la factura, el estado cambia a \emph{Pendiente de validaci\'on} y es visible para el administrador.
+ \item El sistema rechaza archivos en formatos no permitidos y lo informa al cliente.
+ \item El administrador puede marcar la factura como pagada tras revisar el comprobante.}
+
+\subsection*{Sprint 3: m\'odulo administrativo y de control}
+
+\hu{HU-05}{Cancelaci\'on o postergaci\'on con saldo a favor}{Cliente / Administrador}{Should}{8}{Sprint 3}
+{Como cliente, quiero cancelar o postergar una reserva y conservar un saldo a favor, para aplicarlo a futuros alquileres.}
+{\item Una reserva se puede cancelar o postergar seg\'un las condiciones definidas por Royal Technology.
+ \item Al cancelar o postergar, el sistema registra el saldo a favor del cliente.
+ \item El saldo a favor puede aplicarse como descuento en una nueva reserva.
+ \item Al postergar, el horario original queda libre y la nueva fecha debe estar disponible.}
+
+\hu{HU-09}{Recordatorios autom\'aticos}{Cliente / Administrador}{Should}{3}{Sprint 3}
+{Como usuario del sistema, quiero recibir alertas y recordatorios de reservas pr\'oximas y de cobros pendientes, para evitar olvidos y retrasos.}
+{\item El sistema env\'ia un recordatorio antes de una reserva pr\'oxima.
+ \item El sistema env\'ia un recordatorio de las facturas con pago pendiente.
+ \item Los recordatorios enviados quedan registrados y pueden consultarse.
+ \item No se env\'ian recordatorios de reservas canceladas ni de facturas ya pagadas.}
+
+\hu{HU-10}{Incidencias y m\'etricas}{Administrador / Gerencia}{Must}{8}{Sprint 3}
+{Como administrador o gerente, quiero registrar incidencias operativas y visualizar m\'etricas de visitas, alquileres e ingresos, para respaldar las auditor\'ias internas y la toma de decisiones.}
+{\item Se puede registrar una incidencia con fecha, espacio, descripci\'on y estado.
+ \item El panel muestra las visitas, los alquileres y los ingresos por per\'iodo seleccionado.
+ \item Las m\'etricas se calculan a partir de los registros de reservas y facturas del sistema.
+ \item Solo los roles autorizados pueden acceder al panel de m\'etricas.}
+
+\newpage
+\section{Requerimientos no funcionales}\label{app:nfr}
+Cada requerimiento se clasifica seg\'un Sommerville y se acompa\~na de su criterio de validaci\'on y del m\'etodo con el que se verificar\'a durante las pruebas.
+
+\nfr{NFR-01}{Protecci\'on de datos personales}{Externo -- Legislativo}
+{El sistema debe cumplir la legislaci\'on vigente de protecci\'on de datos personales en el tratamiento de la informaci\'on de clientes y prospectos.}
+{Los datos personales de un titular se eliminan en un plazo $\leq$ 30 d\'ias tras su solicitud.}
+{Prueba funcional del proceso de eliminaci\'on y revisi\'on del registro de solicitudes.}
+
+\nfr{NFR-02}{Control de acceso por roles}{Producto -- Seguridad}
+{El acceso a las funciones se restringe seg\'un el rol del usuario (administraci\'on, gerencia o cliente).}
+{Todo intento de acceso a un panel sin los permisos adecuados es bloqueado autom\'aticamente.}
+{Pruebas de acceso con usuarios de cada rol, incluidos intentos no autorizados.}
+
+\nfr{NFR-03}{Disponibilidad del 99\,\%}{Producto -- Confiabilidad}
+{La plataforma debe estar disponible de forma continua para no interrumpir la operaci\'on comercial.}
+{Disponibilidad mensual $\geq$ 99,0\,\% y conmutaci\'on autom\'atica por falla en $\leq$ 60 s.}
+{Monitoreo mensual de disponibilidad y simulaci\'on de falla del servidor principal.}
+
+\nfr{NFR-04}{Rendimiento de navegaci\'on}{Producto -- Eficiencia (rendimiento)}
+{Las consultas de espacios y la navegaci\'on deben responder con rapidez.}
+{Tiempo de respuesta inicial $\leq$ 7 s y $\leq$ 2 s con cach\'e.}
+{Mediciones de tiempo de carga sobre las pantallas principales.}
+
+\nfr{NFR-05}{Usabilidad}{Producto -- Usabilidad}
+{El personal administrativo y los clientes deben aprender a usar el sistema con una capacitaci\'on m\'inima.}
+{Un usuario nuevo completa el flujo b\'asico de reserva sin ayuda tras $\leq$ 30 min de capacitaci\'on.}
+{Prueba de usabilidad con usuarios representativos.}
+
+\nfr{NFR-06}{Eficiencia bajo carga}{Producto -- Eficiencia (carga)}
+{El sistema debe soportar usuarios simult\'aneos sin degradar el servicio.}
+{Tiempo de respuesta promedio $\leq$ 5 s con 10 usuarios concurrentes y uso de CPU $\leq$ 75\,\%.}
+{Prueba de carga con simulaci\'on de usuarios concurrentes.}
+
+\nfr{NFR-07}{Auditor\'ia de permisos}{Producto -- Seguridad (auditor\'ia)}
+{Los cambios de permisos, roles y configuraciones deben quedar registrados para su revisi\'on.}
+{Toda modificaci\'on de roles o permisos queda registrada en un log de auditor\'ia con usuario y fecha.}
+{Revisi\'on del log tras ejecutar cambios de permisos de prueba.}
+
+\nfr{NFR-08}{Respaldo y restauraci\'on}{Producto -- Confiabilidad (recuperaci\'on)}
+{El sistema debe contar con copias de seguridad autom\'aticas que permitan recuperar la informaci\'on.}
+{Respaldos incrementales cada 15 min y restauraci\'on a un punto en el tiempo comprobada.}
+{Verificaci\'on de la generaci\'on de respaldos y simulacro de restauraci\'on.}
+
+\nfr{NFR-09}{HTTPS obligatorio}{Producto -- Seguridad (tr\'ansito)}
+{Toda comunicaci\'on entre el cliente y el servidor debe viajar cifrada.}
+{Redirecci\'on autom\'atica de HTTP a HTTPS con certificado TLS 1.2 o superior v\'alido.}
+{Inspecci\'on de la conexi\'on y an\'alisis del certificado.}
+
+\nfr{NFR-10}{Interfaz responsiva}{Producto -- Usabilidad (dise\~no)}
+{La interfaz debe adaptarse a distintos tama\~nos de pantalla, incluidos los dispositivos m\'oviles.}
+{Las pantallas se adaptan a un m\'ovil sin desplazamiento horizontal ni necesidad de ampliar.}
+{Revisi\'on en dispositivos m\'oviles y en el emulador del navegador.}
+
+\nfr{NFR-11}{Compatibilidad con navegadores}{Organizacional -- Entorno}
+{El sistema debe funcionar en los navegadores web modernos de mayor uso.}
+{Operaci\'on sin errores de renderizado en las versiones recientes de Chrome, Firefox, Safari y Edge.}
+{Ejecuci\'on de los flujos principales en cada navegador.}
+
+\nfr{NFR-12}{Accesibilidad WCAG}{Externo -- Regulatorio (est\'andar)}
+{La interfaz debe cumplir las pautas de accesibilidad para contenido web WCAG 2.1.}
+{Contraste de texto de nivel AA y navegaci\'on completa por teclado.}
+{Auditor\'ia con herramienta de accesibilidad y prueba manual con teclado.}
+
+\nfr{NFR-13}{Actualizaci\'on en tiempo real}{Producto -- Eficiencia (tiempo real)}
+{Los cambios en las reservas deben verse de inmediato por los usuarios conectados.}
+{Un cambio de reserva es visible para los dem\'as usuarios conectados en $\leq$ 2 s.}
+{Prueba con dos sesiones simult\'aneas y medici\'on del retardo.}
+
+\nfr{NFR-14}{Cifrado de datos en reposo}{Producto -- Seguridad (reposo)}
+{Los datos sensibles almacenados en la base de datos deben estar cifrados.}
+{Los datos sensibles se almacenan cifrados con AES-128 o superior.}
+{Inspecci\'on de la base de datos y revisi\'on de la configuraci\'on de cifrado.}
+
+\newpage
+\section{Capturas de pantalla y flujo de ventanas del prototipo}\label{app:prototipo}
+
+\subsection*{Flujo de ventanas}
+La Figura~\ref{fig:flujo} muestra el flujo de navegaci\'on del prototipo para el cliente y para el administrador. En el prototipo, ambos roles ingresan por la misma pantalla de inicio de sesi\'on.
+
+\begin{figure}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  box/.style={draw,rounded corners,minimum width=3.4cm,minimum height=1.0cm,align=center,font=\footnotesize,fill=gray!10},
+  flow/.style={-{Stealth[length=2.5mm]},thick},
+  lab/.style={font=\scriptsize,fill=white,inner sep=1pt}]
+  \node[box,fill=blue!8] (l) at (0,0) {Inicio de sesi\'on\\(\texttt{index.html})};
+  % Cliente
+  \node[font=\small\bfseries,anchor=east] at (2.0,3.0) {Portal del cliente};
+  \node[box] (c1) at (4.4,1.8) {Tarifario y\\cat\'alogo};
+  \node[box] (c2) at (9.8,1.8) {Reservar y\\disponibilidad};
+  \node[box] (c3) at (15.2,1.8) {Datos de facturaci\'on\\(RUC) y factura};
+  \node[box] (c4) at (20.6,1.8) {Mis facturas\\y pagos};
+  \draw[flow] (l) -- node[lab,above,sloped]{correo de cliente} (c1);
+  \draw[flow] (c1) -- node[lab,above]{Reservar} (c2);
+  \draw[flow] (c2) -- node[lab,above]{Seleccionar} (c3);
+  \draw[flow] (c3) -- node[lab,above]{Generar} (c4);
+  % Administrador
+  \node[font=\small\bfseries,anchor=east] at (2.0,-3.0) {Panel administrativo};
+  \node[box] (a1) at (4.4,-1.8) {Panel gerencial:\\m\'etricas y alertas};
+  \node[box] (a2) at (9.8,-1.8) {Control de facturaci\'on\\(aprobar o cancelar)};
+  \node[box] (a3) at (15.2,-1.8) {Clientes y\\saldo a favor};
+  \node[box] (a4) at (20.6,-1.8) {Registro de\\incidencias};
+  \draw[flow] (l) -- node[lab,below,sloped]{correo \texttt{@admin}} (a1);
+  \draw[flow] (a1) -- (a2);
+  \draw[flow] (a2) -- (a3);
+  \draw[flow] (a3) -- (a4);
+  \draw[flow,dashed] (c4.south) -- node[lab,sloped,above]{comprobante de pago} (a2.north);
+\end{tikzpicture}}
+\caption{Flujo de ventanas del prototipo (las flechas punteadas indican la relaci\'on entre el cliente y el administrador)}
+\label{fig:flujo}
+\end{figure}
+
+\subsection*{Capturas de pantalla}
+Las siguientes capturas muestran el recorrido completo del prototipo: cat\'alogo, reserva, facturaci\'on, pago, aprobaci\'on e incidencias.
+
+\protofig{1}{Consulta de disponibilidad horaria de espacios}{M\'odulo donde se eval\'ua la disponibilidad para una fecha y un rango horario, clasificando los espacios entre ocupados y disponibles.}
+\protofig{2}{Historial de facturas y comprobantes de pago del cliente}{Secci\'on del portal del cliente que consolida las facturas emitidas, los valores a pagar, el estado de cobro y la opci\'on para adjuntar el comprobante de pago.}
+\protofig{3}{Tarifario y cat\'alogo centralizado de espacios}{Vista principal del portal del cliente con las categor\'ias de espacios (oficinas privadas, coworking, salas de reuniones y estudios de podcast) y sus tarifas.}
+\protofig{4}{Selecci\'on directa de un espacio en el cat\'alogo}{Selecci\'on de una categor\'ia (por ejemplo, estudio de podcast) desde las tarjetas del cat\'alogo para pasar a la reserva.}
+\protofig{5}{Pesta\~na de reserva y par\'ametros de b\'usqueda}{Formulario inicial donde el usuario elige la empresa, la categor\'ia del espacio, la fecha de uso (con un m\'inimo de un d\'ia de anticipaci\'on) y el horario.}
+\protofig{6}{Ejecuci\'on del filtro de disponibilidad}{Acci\'on del bot\'on \emph{Consultar Disponibilidad}, que valida el horario y el inventario de espacios.}
+\protofig{7}{Selecci\'on de un espacio disponible}{Lista de espacios en estado disponible, entre los cuales el usuario elige la unidad deseada.}
+\protofig{8}{Espacio seleccionado y formulario de facturaci\'on bloqueado}{Confirmaci\'on del espacio elegido con su tarifa; el bot\'on de generar la reserva permanece inhabilitado mientras el campo RUC est\'a vac\'io.}
+\protofig{9}{Habilitaci\'on de la reserva tras ingresar el RUC}{Al ingresar la identificaci\'on fiscal y la direcci\'on, el bot\'on para generar la factura y la reserva se habilita.}
+\protofig{10}{Emisi\'on de la factura y registro de la reserva}{Generaci\'on autom\'atica de la factura con numeraci\'on secuencial y aviso del plazo de cinco d\'ias laborables para el pago.}
+\protofig{11}{Factura en el historial del cliente}{La factura aparece en el historial con estado \emph{Pendiente} y el bot\'on para subir el comprobante de pago.}
+\protofig{12}{Confirmaci\'on de carga del comprobante}{Mensaje de confirmaci\'on de que el comprobante de pago fue adjuntado para su revisi\'on.}
+\protofig{13}{Estado \emph{Pendiente Validaci\'on}}{El estado del pago cambia autom\'aticamente y se informa que la transacci\'on est\'a en verificaci\'on.}
+\protofig{14}{Panel gerencial y m\'etricas}{Vista del administrador con el total de reservas, los ingresos cobrados y el centro de alertas y recordatorios.}
+\protofig{15}{Control de facturaci\'on en el panel administrativo}{Tabla con las reservas y facturas, donde aparece la nueva transacci\'on pendiente de aprobaci\'on.}
+\protofig{16}{Aprobaci\'on del pago por el administrador}{Acci\'on del bot\'on \emph{Aprobar Pago} tras validar que el dinero ingres\'o a la cuenta bancaria.}
+\protofig{17}{Estado \emph{Pagado} en el panel administrativo}{La factura pasa a \emph{Pagado} y su valor se suma a los ingresos cobrados.}
+\protofig{18}{Estado verificado en la vista del cliente}{El cambio se refleja en la cuenta del cliente, donde la factura aparece como verificada.}
+\protofig{19}{Registro de incidencias operativas}{Formulario y tabla del panel administrativo para ingresar novedades t\'ecnicas o de mantenimiento.}
+\protofig{20}{Confirmaci\'on del registro de una incidencia}{La incidencia queda en la bit\'acora con su fecha y el estado \emph{Registrado}.}
+\protofig{21}{Historial consolidado de incidencias}{Vista del historial completo de incidencias, que distingue las resueltas de las registradas.}
+
+\newpage
+\section{Evidencias de reuniones con el cliente}\label{app:reuniones}
+Se adjuntan las actas de las dos reuniones por Microsoft Teams registradas en la Tabla~\ref{tab:reuniones}.
+
+\let\actanp\relax
+\acta{Reuni\'on \#1: presentaci\'on del proyecto}{16 de octubre de 2026}{Microsoft Teams}{10:30 -- 11:00}
+{Stalyn De La Torre & Intermediario (Royal Technology) \\ \hline}
+{\item Explicaci\'on del rol de Royal Technology como intermediario entre el cliente final y el equipo de desarrollo.}
+{reunion_0.png}
+
+\let\actanp\newpage
+\acta{Reuni\'on \#2: levantamiento de requerimientos}{23 de octubre de 2026}{Microsoft Teams}{11:00 -- 12:00}
+{Amy Alcivar & Cliente final \\ \hline}
+{\item Levantamiento de los requerimientos del sistema de gesti\'on y reservas de espacios.}
+{reunion_1.png}
+
+\newpage
+\section{Acta de conformidad del cliente}\label{app:acta}
+
+\IfFileExists{acta_firmada.png}{%
+  Acta de conformidad firmada por la cliente final del proyecto.\par\medskip
+  \centerline{\includegraphics[width=0.92\textwidth,height=0.82\textheight,keepaspectratio]{acta_firmada.png}}
+}{%
+\IfFileExists{acta_firmada.jpg}{%
+  Acta de conformidad firmada por la cliente final del proyecto.\par\medskip
+  \centerline{\includegraphics[width=0.92\textwidth,height=0.82\textheight,keepaspectratio]{acta_firmada.jpg}}
+}{%
+
+\begin{center}
+  {\large\bfseries ESCUELA SUPERIOR POLIT\'ECNICA DEL LITORAL}\\
+  FACULTAD DE INGENIER\'IA EN ELECTRICIDAD Y COMPUTACI\'ON\\
+  INGENIER\'IA DE SOFTWARE I\\[1em]
+  {\Large\bfseries ACTA DE CONFORMIDAD}
+\end{center}
+
+\vspace{0.8cm}
+Guayaquil, \pend{fecha}.
+
+\vspace{0.5cm}
+Yo, \textbf{Amy Alcivar}, en calidad de cliente final del proyecto, declaro que he revisado el documento de Especificaci\'on de Requerimientos de Software del Sistema Web de Gesti\'on y Reservas, elaborado por el Grupo 3 de la materia Ingenier\'ia de Software I, y manifiesto mi \textbf{conformidad} con su contenido, incluidos los requerimientos funcionales, los requerimientos no funcionales y el prototipo presentado.
+
+\vspace{0.5cm}
+El equipo de desarrollo est\'a conformado por:
+\begin{itemize}[nosep]
+  \item Flores Martinez Christopher Mesias
+  \item Villarroel Benitez Victor Adrian
+  \item Fierro Carrion Juan Diego
+  \item Poveda Guerra Jeremias Davide
+  \item Rojas San Andres Eloy Ransesx
+\end{itemize}
+
+\vspace{3cm}
+\begin{center}
+\begin{tabular}{c}
+  \rule{7cm}{0.4pt}\\
+  Firma del cliente final\\
+  Amy Alcivar\\
+  \pend{C\'edula de identidad}
+\end{tabular}
+\end{center}
+}}
+
+\end{document}

@@ -6,13 +6,14 @@ Prototipo web para gestionar reservas de oficinas privadas, espacios de coworkin
 
 ## Integrantes
 
+- Flores Martinez Christopher Mesias
 - Villarroel Benitez Victor Adrian
 - Fierro Carrion Juan Diego
 - Poveda Guerra Jeremias Davide
 - Rojas San Andres Eloy Ransesx
 
 Profesor: Ing. Vanessa Alexandra Jurado Vite
-Cliente (Product Owner): Royal Technology
+Cliente: Royal Technology
 
 ## Cómo ejecutar el prototipo
 
@@ -41,7 +42,7 @@ Los datos se guardan en el `localStorage` del navegador. Para reiniciar la demo,
 ## Metodología y técnicas usadas
 
 - **Scrum** con el cliente como Product Owner, tres sprints y tablero en Trello.
-- **Levantamiento de requerimientos:** reuniones con el Product Owner.
+- **Levantamiento de requerimientos:** reuniones por Microsoft Teams con representantes de Royal Technology (16 y 23 de octubre de 2026).
 - **Historias de usuario** con criterios de aceptación.
 - **Estimación** con Planning Poker (escala de Fibonacci modificada).
 - **Planificación** con diagrama PERT y cálculo de holguras.
@@ -49,5 +50,6 @@ Los datos se guardan en el `localStorage` del navegador. Para reiniciar la demo,
 
 ## Enlaces
 
-- Tablero de Trello: _(completar)_
+- Tablero de Trello: https://trello.com/b/iU1pm31B/sprint-planning
+- Repositorio: https://github.com/juandaxz/isw1-grupo3-royal-technology
 - Documento de requerimientos: `documentos/`
