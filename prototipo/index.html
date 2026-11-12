@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royal Technology S.A. - Acceso al Sistema</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <header>
+        <h1>Royal Technology S.A. <span style="font-size:0.75rem; color:#38bdf8; font-weight:normal;">Sistema Centralizado de Gestión</span></h1>
+    </header>
+
+    <main class="login-wrapper">
+        <div class="login-card">
+            <h2 class="section-title" style="text-align:center; font-size:1.35rem;">Iniciar Sesión</h2>
+            <p class="section-desc" style="text-align:center; font-size:0.85rem;">Ingrese su correo institucional o de cliente. Use <strong>@admin</strong> para acceder al portal gerencial/administrativo.</p>
+            
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Correo Electrónico</label>
+                    <input type="email" id="loginEmail" class="form-control" placeholder="ej. amy.alcivar@admin o cliente@gmail.com" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%; margin-top:1rem;">Ingresar al Sistema</button>
+            </form>
+        </div>
+    </main>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

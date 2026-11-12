@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royal Technology S.A. - Panel Gerencial y Administrativo</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+    <header>
+        <h1>Royal Technology S.A. <span style="font-size:0.75rem; color:#f43f5e; font-weight:normal;">Panel de Control Administrativo</span></h1>
+        <nav>
+            <button onclick="logout()" class="logout-btn">Cerrar Sesión</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- MÉTRICAS -->
+        <div class="dashboard-grid">
+            <div class="stat-card">
+                <h3>Total Reservas Registradas</h3>
+                <div class="number" id="stat-total-reservas">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Ingresos Cobrados (Contabilidad)</h3>
+                <div class="number" id="stat-total-ingresos" style="color:#059669;">$0</div>
+            </div>
+        </div>
+
+        <!-- ALERTAS Y RECORDATORIOS -->
+        <div class="section-container">
+            <h2 class="section-title">Centro de Alertas y Recordatorios</h2>
+            <div class="alert-banner alert-info">
+                <span><strong>Recordatorio de Agenda:</strong> Revise las reservas programadas para mañana y la disponibilidad de salas.</span>
+                <span style="font-size:0.75rem; font-weight:700;">SISTEMA</span>
+            </div>
+            <div class="alert-banner alert-warning">
+                <span><strong>Seguimiento de Cobro:</strong> Verifique los plazos de 5 días para facturas pendientes.</span>
+                <span style="font-size:0.75rem; font-weight:700;">ATENCIÓN</span>
+            </div>
+        </div>
+
+        <!-- CONTROL DE RESERVAS Y PAGOS -->
+        <div class="section-container">
+            <h2 class="section-title">Control de Facturación, Pagos y Cancelaciones</h2>
+            <p class="section-desc">Apruebe pagos recibidos o cancele reservas acreditando saldo a favor para futuros alquileres.</p>
+            
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nro. Factura</th>
+                            <th>Cliente</th>
+                            <th>Espacio</th>
+                            <th>Fecha</th>
+                            <th>Valor</th>
+                            <th>Estado Pago</th>
+                            <th>Acciones Gerenciales</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-reservas-table"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;">
+            <!-- DIRECTORIO DE CLIENTES -->
+            <div class="section-container" style="margin-bottom:0;">
+                <h2 class="section-title" style="font-size:1.25rem;">Base de Datos de Clientes y Prospectos</h2>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Cliente / Empresa</th>
+                                <th>Contacto</th>
+                                <th>Visitas</th>
+                                <th>Saldo a Favor</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-clientes-table"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- REGISTRO DE INCIDENCIAS -->
+            <div class="section-container" style="margin-bottom:0;">
+                <h2 class="section-title" style="font-size:1.25rem;">Registro de Incidencias y Auditoría</h2>
+                <form id="formIncidencia" onsubmit="registrarIncidenciaAdmin(event)" style="margin-bottom:1.5rem;">
+                    <div class="form-group">
+                        <label>Reportar Incidencia (ej. soporte técnico, internet)</label>
+                        <input type="text" id="incDesc" class="form-control" placeholder="Describa la novedad..." required>
+                    </div>
+                    <button type="submit" class="btn" style="width:100%;">Registrar Incidencia</button>
+                </form>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Descripción</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-incidencias-table"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/script.js"></script>
+</body>
+</html>

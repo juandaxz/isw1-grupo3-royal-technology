@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royal Technology S.A. - Portal de Clientes</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+    <header>
+        <h1>Royal Technology S.A. <span style="font-size:0.75rem; color:#38bdf8; font-weight:normal;">Portal del Cliente</span></h1>
+        <nav>
+            <button onclick="switchClientTab('catalogo')" id="nav-catalogo" class="nav-btn active">Tarifario y Catálogo</button>
+            <button onclick="switchClientTab('reservar')" id="nav-reservar" class="nav-btn">Reservar y Disponibilidad</button>
+            <button onclick="switchClientTab('mis-reservas')" id="nav-mis-reservas" class="nav-btn">Mis Facturas y Pagos</button>
+            <button onclick="logout()" class="logout-btn">Cerrar Sesión</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- CATÁLOGO Y TARIFARIO -->
+        <section id="tab-catalogo" class="section-container">
+            <h2 class="section-title">Tarifario y Catálogo Centralizado</h2>
+            <p class="section-desc">Explore oficinas privadas, áreas de coworking, salas de reuniones y estudios de podcast. Al hacer clic en reservar, se autoseleccionará el espacio para verificar su disponibilidad horaria.</p>
+            <div id="client-catalog-grid" class="grid-cards"></div>
+        </section>
+
+        <!-- SECCIÓN UNIFICADA: RESERVA Y DISPONIBILIDAD EN TIEMPO REAL -->
+        <section id="tab-reservar" class="section-container" style="display:none;">
+            <h2 class="section-title">Reserva de Espacios y Verificación de Disponibilidad</h2>
+            <p class="section-desc">Seleccione la fecha, horario y el tipo de espacio deseado para consultar la disponibilidad y completar su reserva.</p>
+            
+            <div style="background:#f8fafc; border:1px solid var(--border); padding:1.5rem; border-radius:0.75rem; margin-bottom:2rem;">
+                <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:1rem;">1. Definir Parámetros de Búsqueda</h3>
+                <div class="form-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+                    <div class="form-group">
+                        <label>Cliente / Empresa Registrada</label>
+                        <select id="resCliente" class="form-control" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de Espacio / Categoría</label>
+                        <select id="resTipoFiltro" class="form-control" onchange="actualizarEspaciosPorCategoria()">
+                            <option value="todos">Todos los espacios</option>
+                            <option value="Oficina Privada">Oficina Privada</option>
+                            <option value="Coworking">Coworking</option>
+                            <option value="Sala de Reuniones">Sala de Reuniones</option>
+                            <option value="Estudio de Podcast">Estudio de Podcast</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Espacio Específico</label>
+                        <select id="resEspacio" class="form-control"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha de Uso (Mín. 1 día ant.)</label>
+                        <input type="date" id="resFecha" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Hora Inicio</label>
+                        <input type="time" id="dispHoraInicio" class="form-control" value="09:00" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Hora Fin</label>
+                        <input type="time" id="dispHoraFin" class="form-control" value="13:00" required>
+                    </div>
+                </div>
+                <div style="margin-top:1rem;">
+                    <button type="button" class="btn btn-primary" onclick="ejecutarConsultaDisponibilidadYReserva()">Consultar Disponibilidad</button>
+                </div>
+            </div>
+
+            <!-- Listado Dinámico de Disponibilidad -->
+            <div id="resultadoDisponibilidadUnificada" style="margin-bottom:2rem;"></div>
+
+            <!-- Formulario Final de Facturación con Botón Bloqueado hasta ingresar RUC -->
+            <div id="contenedorFormFactura" style="display:none; background:#ffffff; border:1px solid var(--border); padding:1.5rem; border-radius:0.75rem;">
+                <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:1rem;">2. Confirmación y Datos de Facturación</h3>
+                <form id="formReservaCliente" onsubmit="procesarReservaCliente(event)">
+                    <div class="form-group">
+                        <label>Datos Fiscales de Facturación (RUC y Dirección)</label>
+                        <input type="text" id="resRuc" class="form-control" placeholder="RUC: 0992837465001 - Dirección Matriz" oninput="validarActivacionBotonReserva()" required>
+                    </div>
+                    <button type="submit" id="btnGenerarReserva" class="btn btn-disabled" style="width:100%; margin-top:1rem;" disabled>Generar Reserva y Factura Oficial</button>
+                </form>
+                <div id="reserva-exitosa-banner" class="alert-banner alert-info" style="display:none; margin-top:1.5rem;"></div>
+            </div>
+        </section>
+
+        <!-- MIS FACTURAS Y PAGOS -->
+        <section id="tab-mis-reservas" class="section-container" style="display:none;">
+            <h2 class="section-title">Historial de Facturas y Comprobantes de Pago</h2>
+            <p class="section-desc">Consulte el valor a pagar de sus facturas y adjunte su comprobante de transferencia bancaria (plazo máximo de 5 días según contrato).</p>
+            
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nro. Factura</th>
+                            <th>Cliente</th>
+                            <th>Espacio</th>
+                            <th>Fecha / Horario</th>
+                            <th>Valor a Pagar</th>
+                            <th>Estado</th>
+                            <th>Acción Comprobante</th>
+                        </tr>
+                    </thead>
+                    <tbody id="client-reservations-table"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/script.js"></script>
+</body>
+</html>
